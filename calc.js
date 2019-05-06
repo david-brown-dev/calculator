@@ -17,21 +17,37 @@ const calculator = {
     this._currentOperation = newValue;
   },
 
+  get currentValue() {
+    return this._currentValue;
+  },
+
+  get storedValue() {
+    return this._storedValue;
+  },
+
+  get currentOperation() {
+    return this._currentOperation;
+  },
+
+  currentToStored() {
+    this.storedValue = this.currentValue;
+  },
+
   addition(num1, num2) {
     num1 + num2
   },
 
   subtraction(num1, num2) {
     num1 - num2;
-  }
+  },
 
   multiplication(num1, num2) {
     num1 * num2;
-  }
+  },
 
   division(num1, num2) {
     num1 / num2;
-  }
+  },
 
 }
 
