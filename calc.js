@@ -5,7 +5,7 @@ math.config({
 })
 
 
-function print(value) {
+const mathFormat = (value) => {
   return (math.format(value, {
     fraction: 'decimal'
   }))
@@ -52,7 +52,7 @@ const calculator = {
 }
 
 const addToCurrentValue = (newValue) => {
-  calculator._currentValue += newValue;
+  return calculator.currentValue += newValue;
 };
 
 const currentToStored = () => {
@@ -61,31 +61,44 @@ const currentToStored = () => {
 };
 
 const addCalc = (stringA, stringB) => {
-  return print(math.add(math.fraction(parseFloat(stringA)), math.fraction(parseFloat(stringB))));
+  return math.add(math.fraction(parseFloat(stringA)), math.fraction(parseFloat(stringB)));
 };
 
 const subtractCalc = (stringA, stringB) => {
-  return print(math.subtract(math.fraction(parseFloat(stringA)), math.fraction(parseFloat(stringB))));
+  return math.subtract(math.fraction(parseFloat(stringA)), math.fraction(parseFloat(stringB)));
 };
 
 const multiplyCalc = (stringA, stringB) => {
-  return print(math.multiply(math.fraction(parseFloat(stringA)), math.fraction(parseFloat(stringB))));
+  return math.multiply(math.fraction(parseFloat(stringA)), math.fraction(parseFloat(stringB)));
 };
 
 const divideCalc = (stringA, stringB) => {
-  return print(math.divide(math.fraction(parseFloat(stringA)), math.fraction(parseFloat(stringB))));
+  return math.divide(math.fraction(parseFloat(stringA)), math.fraction(parseFloat(stringB)));
 };
+
+const percentCalc = (stringA, stringB, operator) => {
+  switch (operator) {
+    case 'multiply':
+      return mathFormat(multiplyCalc(stringA, divideCalc(stringB, '100')));
+    case 'divide':
+      return mathFormat(multiplyCalc(stringA, divideCalc(stringB, '100')));
+    case 'add':
+      return mathFormat(divideCalc(multiplyCalc(stringA, stringB), '100'));
+    case 'sub':
+      return mathFormat(divideCalc(multiplyCalc(stringA, stringB), '100'));
+  }
+}
 
 const runCalulation = (operation) => {
   switch (operation) {
     case 'multiply':
-      return multiplyCalc(calculator.storedValue, calculator.currentValue);
+      return mathFormat(multiplyCalc(calculator.storedValue, calculator.currentValue));
     case 'divide':
-      return divideCalc(calculator.storedValue, calculator.currentValue);
+      return mathFormat(divideCalc(calculator.storedValue, calculator.currentValue));
     case 'add':
-      return addCalc(calculator.storedValue, calculator.currentValue);
+      return mathFormat(addCalc(calculator.storedValue, calculator.currentValue));
     case 'sub':
-      return subtractCalc(calculator.storedValue, calculator.currentValue);
+      return mathFormat(subtractCalc(calculator.storedValue, calculator.currentValue));
   }
 }
 
@@ -93,49 +106,71 @@ const updateScreen = (value) => {
   document.getElementById('screen').textContent = value;
 }
 
+const allClear = () => {
+  clear();
+  calculator.storedValue = '';
+}
+
+const clear = () => {
+  calculator.currentValue = '';
+  updateScreen(0);
+  calculator.calcReturned = false;
+}
+
+const setCurrentOperator = (operator) => {
+  calculator.currentOperation = operator
+  calculator.calcReturned = true;
+}
+
+const calcOnEquals = () => {
+  calculator.currentValue = runCalulation(calculator.currentOperation);
+  updateScreen(calculator.currentValue);
+  calculator.calcReturned = false;
+  calculator.storedValue = ''
+}
+
+const calcOnOperator = (operator) => {
+  calculator.currentValue = runCalulation(calculator.currentOperation);
+  updateScreen(calculator.currentValue);
+  calculator.storedValue = ''
+  setCurrentOperator(operator)
+}
+
 
 const buttonOnClick = (evt) => {
-  if (evt.target.dataset.number && !calculator.calcReturned) {
-    addToCurrentValue(evt.target.value);
-    updateScreen(calculator.currentValue);
-  } else if (evt.target.dataset.number && calculator.calcReturned) {
-    currentToStored();
-    calculator.calcReturned = false;
-    addToCurrentValue(evt.target.value);
-    updateScreen(calculator.currentValue);
+  if (evt.target.dataset.number) {
+    if (!calculator.calcReturned) {
+      updateScreen(addToCurrentValue(evt.target.value));
+    } else {
+      currentToStored();
+      calculator.calcReturned = false;
+      updateScreen(addToCurrentValue(evt.target.value));
+    }
   }
 
   if (evt.target.dataset.action) {
     if (calculator.currentValue !== '' && calculator.storedValue !== '') {
-      calculator.currentValue = runCalulation(calculator.currentOperation);
-      updateScreen(calculator.currentValue);
-      calculator.storedValue = ''
-      calculator.currentOperation = evt.target.dataset.action
-      calculator.calcReturned = true;
+      calcOnOperator(evt.target.dataset.action);
     } else {
-      calculator.currentOperation = evt.target.dataset.action
-      calculator.calcReturned = true;
+      setCurrentOperator(evt.target.dataset.action)
     }
   }
 
   if (evt.target.dataset.sum === 'equals' && calculator.currentValue !== '' && calculator.storedValue !== '') {
-    calculator.currentValue = runCalulation(calculator.currentOperation);
-    updateScreen(calculator.currentValue);
-    calculator.calcReturned = false;
-    calculator.storedValue = ''
+    calcOnEquals();
+  }
+
+  if (evt.target.dataset.sum === 'percent' && calculator.currentValue !== '' && calculator.storedValue !== '') {
+    calculator.currentValue = percentCalc(calculator.storedValue, calculator.currentValue, calculator.currentOperation);
+    updateScreen(calculator.currentValue)
   }
 
   if (evt.target.dataset.delete === 'clear') {
-    calculator.currentValue = '';
-    updateScreen(0);
-    calculator.calcReturned = false;
+    clear();
   }
 
   if (evt.target.dataset.delete === 'all-clear') {
-    calculator.currentValue = '';
-    calculator.storedValue = '';
-    updateScreen(0);
-    calculator.calcReturned = false;
+    allClear();
   }
 
 }
