@@ -7,8 +7,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  <link href="https://fonts.googleapis.com/css?family=Work+Sans:400,700" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Dosis:800" rel="stylesheet">
   <link href="calc.css" rel="stylesheet" type="text/css">
   <script defer src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
     integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
@@ -19,43 +17,44 @@
   <script defer src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
     integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
   </script>
+  <script defer type="module" src="calc.js"></script>
+  <script src="./node_modules/mathjs/dist/math.js"></script>
 </head>
 
-<body>
+<body class="bg-dark">
 
-  <div class="container">
+  <div id="calculator" class="container">
     <div class="row">
-      <div class="col-xs-12"><input class="btn btn-primary" type="button" value="AC"></div>
-
+      <div id="screen" class="col-xs-3 border screen bg-white">0</div>
     </div>
     <div class="row">
-      <div class="col-xs-3"><input class="btn btn-primary calc-button" type="button" value="AC"></div>
-      <div class="col-xs-3"><input class="btn btn-primary calc-button" type="button" value="CE"></div>
-      <div class="col-xs-3"><input class="btn btn-primary calc-button" type="button" value="%"></div>
-      <div class="col-xs-3"><input class="btn btn-primary calc-button" type="button" value="÷"></div>
+      <div class="col-xs-3"><input class="btn btn-primary calc-button" type="button" data-delete="all-clear" value="AC"></div>
+      <div class="col-xs-3"><input class="btn btn-primary calc-button" type="button" data-delete="clear" value="CE"></div>
+      <div class="col-xs-3"><input class="btn btn-primary calc-button" type="button" data-sum="percent" value="%"></div>
+      <div class="col-xs-3"><input class="btn btn-primary calc-button" type="button" data-action="divide" value="÷"></div>
     </div>
     <div class="row">
-      <div class="col-xs-3"><input class="btn btn-primary calc-button" type="button" value="7"></div>
-      <div class="col-xs-3"><input class="btn btn-primary calc-button" type="button" value="8"></div>
-      <div class="col-xs-3"><input class="btn btn-primary calc-button" type="button" value="9"></div>
-      <div class="col-xs-3"><input class="btn btn-primary calc-button" type="button" value="x"></div>
+      <div class="col-xs-3"><input class="btn btn-primary calc-button" type="button" data-number="7" value="7"></div>
+      <div class="col-xs-3"><input class="btn btn-primary calc-button" type="button" data-number="8" value="8"></div>
+      <div class="col-xs-3"><input class="btn btn-primary calc-button" type="button" data-number="9" value="9"></div>
+      <div class="col-xs-3"><input class="btn btn-primary calc-button" type="button" data-action="multiply" value="x"></div>
     </div>
     <div class="row">
-      <div class="col-xs-3"><input class="btn btn-primary calc-button" type="button" value="4"></div>
-      <div class="col-xs-3"><input class="btn btn-primary calc-button" type="button" value="5"></div>
-      <div class="col-xs-3"><input class="btn btn-primary calc-button" type="button" value="6"></div>
-      <div class="col-xs-3"><input class="btn btn-primary calc-button" type="button" value="-"></div>
+      <div class="col-xs-3"><input class="btn btn-primary calc-button" type="button" data-number="4" value="4"></div>
+      <div class="col-xs-3"><input class="btn btn-primary calc-button" type="button" data-number="5" value="5"></div>
+      <div class="col-xs-3"><input class="btn btn-primary calc-button" type="button" data-number="6" value="6"></div>
+      <div class="col-xs-3"><input class="btn btn-primary calc-button" type="button" data-action="sub" value="-"></div>
     </div>
     <div class="row">
-      <div class="col-xs-3"><input class="btn btn-primary calc-button" type="button" value="1"></div>
-      <div class="col-xs-3"><input class="btn btn-primary calc-button" type="button" value="2"></div>
-      <div class="col-xs-3"><input class="btn btn-primary calc-button" type="button" value="3"></div>
+      <div class="col-xs-3"><input class="btn btn-primary calc-button" type="button" data-number="1" value="1"></div>
+      <div class="col-xs-3"><input class="btn btn-primary calc-button" type="button" data-number="2" value="2"></div>
+      <div class="col-xs-3"><input class="btn btn-primary calc-button" type="button" data-number="3" value="3"></div>
     </div>
     <div class="row">
-      <div class="col-xs-3"><input class="btn btn-primary calc-button" type="button" value="0"></div>
-      <div class="col-xs-3"><input class="btn btn-primary calc-button" type="button" value="."></div>
-      <div class="col-xs-3"><input class="btn btn-primary calc-button" type="button" value="="></div>
-      <div class="col-xs-3"><input class="btn btn-primary plus-button" type="button" value="+"></div>
+      <div class="col-xs-3"><input class="btn btn-primary calc-button" type="button" data-number="0" value="0"></div>
+      <div class="col-xs-3"><input class="btn btn-primary calc-button" type="button" data-number="." value="."></div>
+      <div class="col-xs-3"><input class="btn btn-primary calc-button" type="button" data-sum="equals" value="="></div>
+      <div class="col-xs-3"><input class="btn btn-primary plus-button" type="button" data-action="add" value="+"></div>
     </div>
   </div>
 </body>

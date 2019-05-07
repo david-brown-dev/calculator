@@ -11,3 +11,8 @@
   position: relative;
   top: -54px;
 }
+
+.screen {
+  width: 215px;
+  margin: 5px 0;
+}
