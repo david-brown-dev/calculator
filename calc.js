@@ -89,16 +89,16 @@ const percentCalc = (stringA, stringB, operator) => {
   }
 }
 
-const runCalulation = (operation) => {
+const runCalulation = (stringA, stringB, operation) => {
   switch (operation) {
     case 'multiply':
-      return mathFormat(multiplyCalc(calculator.storedValue, calculator.currentValue));
+      return mathFormat(multiplyCalc(stringA, stringB));
     case 'divide':
-      return mathFormat(divideCalc(calculator.storedValue, calculator.currentValue));
+      return mathFormat(divideCalc(stringA, stringB));
     case 'add':
-      return mathFormat(addCalc(calculator.storedValue, calculator.currentValue));
+      return mathFormat(addCalc(stringA, stringB));
     case 'sub':
-      return mathFormat(subtractCalc(calculator.storedValue, calculator.currentValue));
+      return mathFormat(subtractCalc(stringA, stringB));
   }
 }
 
@@ -122,15 +122,15 @@ const setCurrentOperator = (operator) => {
   calculator.calcReturned = true;
 }
 
-const calcOnEquals = () => {
-  calculator.currentValue = runCalulation(calculator.currentOperation);
+const calcOnEquals = (stringA, stringB, operator) => {
+  calculator.currentValue = runCalulation(stringA, stringB, operator);
   updateScreen(calculator.currentValue);
   calculator.calcReturned = false;
   calculator.storedValue = ''
 }
 
-const calcOnOperator = (operator) => {
-  calculator.currentValue = runCalulation(calculator.currentOperation);
+const calcOnOperator = (stringA, stringB, operator) => {
+  calculator.currentValue = runCalulation(stringA, stringB, operator);
   updateScreen(calculator.currentValue);
   calculator.storedValue = ''
   setCurrentOperator(operator)
@@ -150,14 +150,14 @@ const buttonOnClick = (evt) => {
 
   if (evt.target.dataset.action) {
     if (calculator.currentValue !== '' && calculator.storedValue !== '') {
-      calcOnOperator(evt.target.dataset.action);
+      calcOnOperator(calculator.storedValue, calculator.currentValue, evt.target.dataset.action);
     } else {
       setCurrentOperator(evt.target.dataset.action)
     }
   }
 
   if (evt.target.dataset.sum === 'equals' && calculator.currentValue !== '' && calculator.storedValue !== '') {
-    calcOnEquals();
+    calcOnEquals(calculator.storedValue, calculator.currentValue, calculator.currentOperation);
   }
 
   if (evt.target.dataset.sum === 'percent' && calculator.currentValue !== '' && calculator.storedValue !== '') {
