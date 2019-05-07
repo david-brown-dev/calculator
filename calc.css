@@ -1,0 +1,26 @@
+.calc-button {
+  width: 75px;
+  height: 75px;
+  margin: 4px;
+  font-weight: 700;
+  font-size: 24px;
+}
+
+.plus-button {
+  width: 75px;
+  height: 158px;
+  margin: 4px;
+  position: relative;
+  top: -83px;
+}
+
+.screen {
+  width: 325px;
+  height: 75px;
+  margin: 5px 4px;
+  font-size: 55px;
+  font-weight: 700;
+  text-align: right;
+  line-height: 70px;
+  border-radius: 5px;
+}
