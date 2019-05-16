@@ -1,8 +1,3 @@
 # Calculator
 
-This is the repository that will hold your files for the calculator challenge.
-
-During this challenge you will:
-1. Fork this repo
-2. Make changes on your own copy
-3. Send a pull request back to dev-academy-foundations/calculator with your updates
+My calculator project I completed while in the initial days of Dev Academy. Using Bootstrap 4 and math.js to fix those pesky JS fractional calculation problems.
