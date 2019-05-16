@@ -11,7 +11,10 @@
   height: 158px;
   margin: 4px;
   position: relative;
+  font-weight: 700;
+  font-size: 24px;
   top: -83px;
+  border-radius: 65px;
 }
 
 .screen {
@@ -23,4 +26,5 @@
   text-align: right;
   line-height: 70px;
   border-radius: 5px;
+  overflow: hidden;
 }
