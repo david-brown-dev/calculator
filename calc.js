@@ -1,7 +1,6 @@
-// configure the default type of numbers as Fractions
+// math.js configuration settings and formatting function. This is used to fix the base-10 to base-2 fraction problems.
 math.config({
-  number: 'Fraction' // Default type of number:
-  // 'number' (default), 'BigNumber', or 'Fraction'
+  number: 'Fraction'
 })
 
 
@@ -10,6 +9,8 @@ const mathFormat = (value) => {
     fraction: 'decimal'
   }))
 }
+
+//Calculator object used as shared state for calc operations with getters and setters.
 
 const calculator = {
   _currentValue: '',
@@ -51,14 +52,7 @@ const calculator = {
   }
 }
 
-const addToCurrentValue = (newValue) => {
-  return calculator.currentValue += newValue;
-};
-
-const currentToStored = () => {
-  calculator.storedValue = calculator.currentValue;
-  calculator.currentValue = ''
-};
+// Core math calculations 
 
 const addCalc = (stringA, stringB) => {
   return math.add(math.fraction(parseFloat(stringA)), math.fraction(parseFloat(stringB)));
@@ -76,6 +70,8 @@ const divideCalc = (stringA, stringB) => {
   return math.divide(math.fraction(parseFloat(stringA)), math.fraction(parseFloat(stringB)));
 };
 
+// Calculate and return percentages
+
 const percentCalc = (stringA, stringB, operator) => {
   switch (operator) {
     case 'multiply':
@@ -88,6 +84,8 @@ const percentCalc = (stringA, stringB, operator) => {
       return mathFormat(divideCalc(multiplyCalc(stringA, stringB), '100'));
   }
 }
+
+//Check object operator storage to call correct calculation
 
 const runCalulation = (stringA, stringB, operation) => {
   switch (operation) {
@@ -102,9 +100,34 @@ const runCalulation = (stringA, stringB, operation) => {
   }
 }
 
+//Helper functions to update calc object information and DOM
+
+const addToCurrentValue = (currentValue, newValue) => {
+  const filteredNewValue = oneDecimalOnly(currentValue, newValue);
+  currentValue += filteredNewValue;
+  calculator.currentValue = currentValue;
+  return currentValue;
+};
+
+const currentToStored = () => {
+  calculator.storedValue = calculator.currentValue;
+  calculator.currentValue = ''
+};
+
+
+const oneDecimalOnly = (currentValue, valueToUpdate) => {
+  if (currentValue.includes('.') && valueToUpdate === '.') {
+    return '';
+  } else {
+    return valueToUpdate;
+  }
+}
+
 const updateScreen = (value) => {
   document.getElementById('screen').textContent = value;
 }
+
+// Operator and clear button functions.
 
 const allClear = () => {
   clear();
@@ -136,15 +159,16 @@ const calcOnOperator = (stringA, stringB, operator) => {
   setCurrentOperator(operator)
 }
 
+//Listener logic
 
 const buttonOnClick = (evt) => {
   if (evt.target.dataset.number) {
     if (!calculator.calcReturned) {
-      updateScreen(addToCurrentValue(evt.target.value));
+      updateScreen(addToCurrentValue(calculator.currentValue, evt.target.value));
     } else {
       currentToStored();
       calculator.calcReturned = false;
-      updateScreen(addToCurrentValue(evt.target.value));
+      updateScreen(addToCurrentValue(calculator.currentValue, evt.target.value));
     }
   }
 
